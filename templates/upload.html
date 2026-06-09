@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Upload Dataset - AI Customer Analytics{% endblock %}
+
+{% block content %}
+<h1 class="dashboard-title mb-4"><i class="bi bi-cloud-upload"></i> Dataset Upload</h1>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow-sm p-4">
+            <p class="text-muted">Upload CSV files to update datasets and automatically retrain ML models.</p>
+            <form method="POST" action="{{ url_for('upload') }}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Dataset Type</label>
+                    <select name="dataset_type" class="form-select" required>
+                        <option value="customers">Customers (customers.csv)</option>
+                        <option value="sales">Sales (sales.csv)</option>
+                        <option value="reviews">Reviews (reviews.csv)</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">CSV File</label>
+                    <input type="file" name="file" class="form-control" accept=".csv" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-upload"></i> Upload & Retrain Models
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm p-4">
+            <h5 class="section-title">Required CSV Columns</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>customers:</strong> customer_id, age, income, spending_score, total_purchases, churned, clv, will_purchase
+                </li>
+                <li class="list-group-item">
+                    <strong>sales:</strong> month, year, revenue, units_sold, product_category
+                </li>
+                <li class="list-group-item">
+                    <strong>reviews:</strong> customer_id, review_text, rating
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

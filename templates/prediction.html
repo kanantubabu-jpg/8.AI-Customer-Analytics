@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Predictions - AI Customer Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-5">
+        <div class="card shadow-sm p-4">
+            <h4 class="section-title"><i class="bi bi-cpu"></i> Customer Prediction</h4>
+            <p class="text-muted">Enter customer attributes to get AI-powered insights.</p>
+            <form method="POST" action="{{ url_for('prediction') }}">
+                <div class="mb-3">
+                    <label class="form-label">Age</label>
+                    <input type="number" name="age" class="form-control" min="18" max="100"
+                           value="{{ result.age if result else 35 }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Annual Income (in thousands)</label>
+                    <input type="number" name="income" class="form-control" min="1" step="0.1"
+                           value="{{ result.income if result else 50 }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Spending Score (1-100)</label>
+                    <input type="number" name="spending_score" class="form-control" min="1" max="100"
+                           value="{{ result.spending_score if result else 65 }}" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-lightning"></i> Run Prediction
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        {% if result %}
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm result-card bg-primary text-white">
+                    <h6>Customer Segment</h6>
+                    <h3>{{ result.segment }}</h3>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm result-card bg-success text-white">
+                    <h6>Purchase Probability</h6>
+                    <h3>{{ "%.1f"|format(result.purchase_probability * 100) }}%</h3>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm result-card bg-danger text-white">
+                    <h6>Churn Risk</h6>
+                    <h3>{{ "%.1f"|format(result.churn_risk * 100) }}%</h3>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm result-card bg-info text-white">
+                    <h6>Customer Lifetime Value</h6>
+                    <h3>{{ "{:,.0f}".format(result.clv) }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm p-4">
+            <h5 class="section-title"><i class="bi bi-stars"></i> Recommended Products</h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in result.recommendations %}
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td><span class="badge bg-secondary">{{ product.category }}</span></td>
+                            <td>{{ "%.2f"|format(product.price) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <div class="card shadow-sm p-5 text-center text-muted">
+            <i class="bi bi-arrow-left-circle fs-1"></i>
+            <p class="mt-3">Fill in the form and run a prediction to see AI insights here.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

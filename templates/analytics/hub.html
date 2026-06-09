@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Advanced Analytics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h1 class="dashboard-title"><i class="bi bi-grid-3x3-gap"></i> Advanced Analytics Modules</h1>
+        <p class="text-muted mb-0">Each module has its own dedicated graph — Role: <strong>{{ role_label }}</strong></p>
+    </div>
+    <form id="roleForm" class="d-flex gap-2 align-items-center">
+        <label class="form-label mb-0 small">Switch Role:</label>
+        <select name="role" class="form-select form-select-sm" style="width:auto;">
+            <option value="data_analyst" {% if role == 'data_analyst' %}selected{% endif %}>Data Analyst</option>
+            <option value="marketing_manager" {% if role == 'marketing_manager' %}selected{% endif %}>Marketing Manager</option>
+            <option value="viewer" {% if role == 'viewer' %}selected{% endif %}>Viewer</option>
+        </select>
+    </form>
+</div>
+
+<div class="row g-3">
+    {% for m in modules %}
+    <div class="col-md-6 col-lg-4">
+        <a href="{{ url_for('analytics.analytics_page', slug=m.slug) }}" class="text-decoration-none">
+            <div class="card shadow-sm p-4 h-100 analytics-module-card">
+                <h5 class="text-primary">{{ m.title }}</h5>
+                <p class="text-muted small mb-2">{{ m.description[:90] }}...</p>
+                <span class="badge bg-secondary">{{ m.chart_type|replace('_', ' ')|title }}</span>
+                {% if m.live %}<span class="badge bg-danger ms-1">Live</span>{% endif %}
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('roleForm').querySelector('select').addEventListener('change', function() {
+    const fd = new FormData();
+    fd.append('role', this.value);
+    fetch('{{ url_for("analytics.set_role") }}', { method: 'POST', body: fd })
+        .then(() => location.reload());
+});
+</script>
+{% endblock %}

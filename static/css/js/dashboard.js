@@ -1,0 +1,102 @@
+/* General */
+
+body {
+    background-color: #f4f6f9;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Navbar */
+
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Cards */
+
+.card {
+    border: none;
+    border-radius: 15px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* KPI Cards */
+
+.kpi-card {
+    text-align: center;
+    padding: 20px;
+}
+
+.kpi-card h2 {
+    font-weight: bold;
+}
+
+/* Login & Register */
+
+.login-card {
+    margin-top: 60px;
+}
+
+.form-control {
+    border-radius: 10px;
+}
+
+.btn {
+    border-radius: 10px;
+}
+
+/* Dashboard */
+
+.dashboard-title {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.section-title {
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Prediction Results */
+
+.result-card {
+    text-align: center;
+    padding: 20px;
+}
+
+.result-card h3 {
+    font-size: 28px;
+}
+
+/* Charts */
+
+canvas {
+    max-width: 100%;
+}
+
+/* Tables */
+
+.table {
+    background: white;
+    border-radius: 10px;
+}
+
+/* Footer */
+
+footer {
+    margin-top: 50px;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+    .card{
+        margin-bottom:15px;
+    }
+
+}

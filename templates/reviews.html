@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Sentiment Analysis - AI Customer Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-5">
+        <div class="card shadow-sm p-4">
+            <h4 class="section-title"><i class="bi bi-chat-quote"></i> Analyze Review</h4>
+            <form method="POST" action="{{ url_for('reviews') }}">
+                <div class="mb-3">
+                    <label class="form-label">Customer Review</label>
+                    <textarea name="review_text" class="form-control" rows="5"
+                              placeholder="Enter customer review text..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Analyze Sentiment
+                </button>
+            </form>
+
+            {% if analysis_result %}
+            <div class="mt-4 p-3 rounded
+                {% if analysis_result.sentiment == 'Positive' %}bg-success-subtle
+                {% elif analysis_result.sentiment == 'Negative' %}bg-danger-subtle
+                {% else %}bg-secondary-subtle{% endif %}">
+                <h5>
+                    {% if analysis_result.sentiment == 'Positive' %}
+                    <i class="bi bi-emoji-smile text-success"></i>
+                    {% elif analysis_result.sentiment == 'Negative' %}
+                    <i class="bi bi-emoji-frown text-danger"></i>
+                    {% else %}
+                    <i class="bi bi-emoji-neutral text-secondary"></i>
+                    {% endif %}
+                    {{ analysis_result.sentiment }}
+                </h5>
+                <p class="mb-1"><strong>Score:</strong> {{ analysis_result.score }}</p>
+                <p class="mb-0"><strong>Insight:</strong> {{ analysis_result.insight }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="card shadow-sm p-4">
+            <h5 class="section-title"><i class="bi bi-clock-history"></i> Recent Reviews</h5>
+            {% if recent_reviews %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Review</th>
+                            <th>Sentiment</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in recent_reviews %}
+                        <tr>
+                            <td>{{ r.review_text[:80] }}{% if r.review_text|length > 80 %}...{% endif %}</td>
+                            <td>
+                                <span class="badge
+                                    {% if r.sentiment == 'Positive' %}bg-success
+                                    {% elif r.sentiment == 'Negative' %}bg-danger
+                                    {% else %}bg-secondary{% endif %}">
+                                    {{ r.sentiment }}
+                                </span>
+                            </td>
+                            <td>{{ r.sentiment_score }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted text-center py-4">No reviews analyzed yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
